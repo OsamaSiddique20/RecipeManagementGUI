@@ -33,3 +33,18 @@ class Recipe(db.Model):
     def get_by_id(cls,id):
         result = cls.query.filter(cls.recipe_id == id).first()
         return result.data if result else None
+    
+
+
+    @classmethod
+    def update(cls, id, data):
+        recipe = cls.query.get(id)
+        if not recipe:
+            return {'message': 'Recipe not found'}, HTTPStatus.NOT_FOUND
+        recipe.name = data.get('name', recipe.name)
+        recipe.instructions = data.get('instructions', recipe.instructions)
+        recipe.ingredients = data.get('ingredients', recipe.ingredients)
+        recipe.category = data.get('category', recipe.category)
+        recipe.rating = data.get('rating', recipe.rating)
+        db.session.commit()
+        return {'message': 'Update successful'}, HTTPStatus.OK
