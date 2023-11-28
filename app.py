@@ -41,3 +41,75 @@ def routes(app):
                 return  {"Message":" recipe not found"}
             return render_template('search-recipe.html',recipes=data)
         return {"Message":"Entry type should be integer or number"}
+    
+        
+    @app.route('/update-recipe/<int:recipe_id>', methods=["GET", "POST"])
+    def update_recipe(recipe_id):
+        if request.method == 'POST':
+            name = request.form.get('name')
+            instructions = request.form.get('instructions')
+            ingredients = request.form.get('ingredients')
+            category = request.form.get('category')
+            rating = request.form.get('rating')
+
+            data = {
+                'name': name,
+                'instructions': instructions,
+                'ingredients': ingredients,
+                'category': category,
+                'rating': rating
+            }
+
+            response, status = Recipe.update(recipe_id, data)
+            all_recipes = Recipe.get_all()
+        
+            return render_template('index.html', recipes=all_recipes)
+
+        else:
+            
+            recipe = Recipe.query.get(recipe_id)
+            if recipe:
+                return render_template("update.html", recipe=recipe)
+            else:
+                return jsonify({'message': 'Recipe not found'}), HTTPStatus.NOT_FOUND
+
+
+    
+    @app.route('/add-recipe', methods=["GET", "POST"])
+    def add_recipe():
+        if request.method == 'POST':
+            name = request.form.get('name')
+            instructions = request.form.get('instructions')
+            ingredients = request.form.get('ingredients')
+            category = request.form.get('category')
+            rating = int(request.form.get('rating'))
+            if not name or not instructions or not ingredients or not category or not rating:
+                return jsonify({'message': 'All fields are required.'}), HTTPStatus.BAD_REQUEST
+
+            data = {
+                'name': name,
+                'instructions': instructions,
+                'ingredients': ingredients,
+                'category': category,
+                'rating': rating
+            }
+
+            response, status = Recipe.add(data)
+            all()
+            all_recipes = Recipe.get_all()
+        
+            return render_template('index.html', recipes=all_recipes)
+        
+    @app.route("/delete/<int:recipe_id>")
+    def delete_recipe(recipe_id):
+        print(recipe_id)
+        respones , status = Recipe.delete(recipe_id)
+
+        all_recipes = Recipe.get_all()
+    
+        return render_template('index.html', recipes=all_recipes)
+
+
+if _name_ == '_main_':
+    app = create_app()
+    app.run('127.0.0.1', 5000)
