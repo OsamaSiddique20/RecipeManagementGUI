@@ -110,6 +110,6 @@ def routes(app):
         return render_template('index.html', recipes=all_recipes)
 
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app = create_app()
     app.run('127.0.0.1', 5000)
