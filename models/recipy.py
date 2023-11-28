@@ -20,6 +20,20 @@ class Recipe(db.Model):
             'rating': self.rating
         }
     
+    @classmethod
+    def add(cls, data):
+        new_recipe = cls(
+            name=data['name'],
+            instructions=data['instructions'],
+            ingredients=data.get('ingredients'),
+            category=data.get('category'),
+            rating=data.get('rating')
+        )
+        db.session.add(new_recipe)
+        db.session.commit()
+
+        return {'name': new_recipe.name, 'instructions': new_recipe.instructions,'ingredients':new_recipe.ingredients,'category':new_recipe.category,'rating':new_recipe.rating}, 201
+    
     def save(self):
         db.session.add(self)
         db.session.commit()
