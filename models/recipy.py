@@ -23,3 +23,13 @@ class Recipe(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    @classmethod
+    def get_all(cls):
+        result = cls.query.all()
+        return [recipe.data for recipe in result]
+    
+    @classmethod
+    def get_by_id(cls,id):
+        result = cls.query.filter(cls.recipe_id == id).first()
+        return result.data if result else None
