@@ -28,3 +28,21 @@ class RecipeListResource(Resource):
         recipe.save()
 
         return recipe.data, HTTPStatus.CREATED
+    
+    class RecipeResource(Resource):
+
+        def get(self, recipe_id):
+            recipe = Recipe.get_by_id(recipe_id)
+
+            if recipe is None:
+                return {'message': 'recipe not found'}, HTTPStatus.NOT_FOUND
+
+            return recipe.data, HTTPStatus.OK
+
+        def put(self, recipe_id):
+            data = request.get_json()
+
+            return Recipe.update(recipe_id, data)
+
+        def delete(self, recipe_id):
+            return Recipe.delete(recipe_id)
