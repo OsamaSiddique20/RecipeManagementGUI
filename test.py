@@ -1,27 +1,49 @@
+# test_app.py
 import unittest
-from flask import Flask, url_for
 from app import create_app
+from extensions import db
+from models.recipe import Recipe
 
-class TestApp(unittest.TestCase):
-
+class TestAppRoutes(unittest.TestCase):
     def setUp(self):
-        self.app = create_app()
-        self.client = self.app.test_client()
+        self.app = create_app().test_client()
 
-    def test_index_route(self):
-        response = self.client.get('/')
+    def test_home_route(self):
+        response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
 
     # def test_search_route(self):
-    #     response = self.client.get('/search?search=1')
+    #     response = self.app.get('/search?search=1')
     #     self.assertEqual(response.status_code, 200)
 
-    # def test_nonexistent_recipe_search_route(self):
-    #     response = self.client.get('/search?search=999')
-    #     self.assertEqual(response.status_code, 200) 
- 
+    # def test_add_recipe_route(self):
+    #     response = self.app.get('/add-recipe')
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_update_recipe_route(self):
+    #     response = self.app.get('/update-recipe/17')
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_delete_recipe_route(self):
+    #     response = self.app.get('/delete/17')
+    #     self.assertEqual(response.status_code, 200)
+
+    def test_add_method(self):
+        data={
+                'name': "name",
+                'instructions': "instructions",
+                'ingredients': "ingredients,sahdg,sdasd",
+                'category': "category",
+                'rating': 3
+            }
+        try:
+            Recipe.add(data)
+            flag=False
+        except:
+            flag=True
+        self.assertTrue(flag)
+
 
 
 if __name__ == '__main__':
-    print(1111)
     unittest.main()

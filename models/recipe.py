@@ -22,6 +22,8 @@ class Recipe(db.Model):
     
     @classmethod
     def add(cls, data):
+        print(11)
+        print(data)
         new_recipe = cls(
             name=data['name'],
             instructions=data['instructions'],
@@ -30,7 +32,9 @@ class Recipe(db.Model):
             rating=data.get('rating')
         )
         db.session.add(new_recipe)
+        print(1212)
         db.session.commit()
+        
 
         return {'name': new_recipe.name, 'instructions': new_recipe.instructions,'ingredients':new_recipe.ingredients,'category':new_recipe.category,'rating':new_recipe.rating}, 201
     
