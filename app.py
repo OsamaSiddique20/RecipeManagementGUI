@@ -1,8 +1,8 @@
 from http import HTTPStatus
-from flask import flash, request
+
 import sys
 from extensions import db
-from flask import Flask, jsonify, redirect, render_template, url_for
+from flask import Flask, jsonify, redirect, render_template, url_for,request
 from flask_migrate import Migrate
 from flask_restful import Api
 from models.recipe import Recipe
@@ -93,13 +93,13 @@ def routes(app):
                 'category': category,
                 'rating': rating
             }
-
+            
             response, status = Recipe.add(data)
-            all()
+            
             all_recipes = Recipe.get_all()
-        
+            all()
             return render_template('index.html', recipes=all_recipes)
-        
+        return render_template('add_recipe.html')
     @app.route("/delete/<int:recipe_id>")
     def delete_recipe(recipe_id):
         print(recipe_id)
@@ -110,6 +110,6 @@ def routes(app):
         return render_template('index.html', recipes=all_recipes)
 
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app = create_app()
     app.run('127.0.0.1', 5000)
